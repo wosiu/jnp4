@@ -16,6 +16,7 @@
 //     blabla;
 // }
 // TODO :* zniszczyc powyzsze
+// 80 znakow per linia i ni źdźbła wiecej
 
 /* ========================== COMPANY ======================================= */
 
@@ -94,9 +95,9 @@ public:
 	Group( Group<C> const& );
 
 	unsigned int get_size() const;
-	void set_acc_val( unsigned int i );
-	void set_hs_val( unsigned int i );
-	void set_exo_val( unsigned int i );
+	void set_acc_val( unsigned int );
+	void set_hs_val( unsigned int );
+	void set_exo_val( unsigned int );
 	unsigned int get_acc_val() const;
 	unsigned int get_hs_val() const;
 	unsigned int get_exo_val() const;
@@ -118,13 +119,15 @@ public:
 
 	template<class C1, class C2>
 	friend Group<remove_comp<C1,C2> >& operator-=( Group<C1> &a, Group<C2> &b );
+*/
 
 	//TODO a moze by tak void..
-	Group operator*( int i );
-	Group operator/( int i );
-	Group& operator*=( int i );
-	Group& operator/=( int i );
+	Group operator*( unsigned int ) const;
+	Group operator/( unsigned int ) const;
+	Group<C>& operator*=( unsigned int );
+	Group& operator/=( unsigned int );
 
+/*
 	template<class C1, class C2>
 	friend bool operator==( Group<C1> a, Group<C2> b );
 
@@ -176,21 +179,21 @@ unsigned int Group<C>::get_size() const
 }
 
 template<class C>
-void Group<C>::set_acc_val( unsigned int i )
+void Group<C>::set_acc_val( unsigned int n )
 {
-    acc_val = i;
+    acc_val = n;
 }
 
 template<class C>
-void Group<C>::set_hs_val( unsigned int i )
+void Group<C>::set_hs_val( unsigned int n )
 {
-    hsh_val = i;
+    hsh_val = n;
 }
 
 template<class C>
-void Group<C>::set_exo_val( unsigned int i )
+void Group<C>::set_exo_val( unsigned int n )
 {
-    exo_val = i;
+    exo_val = n;
 }
 
 template<class C>
@@ -218,6 +221,53 @@ unsigned int Group<C>::get_value() const
 			+ exo_val * company.exo ) * companies_no;
 }
 
+
+// TODO :*
+// operatory:  GRUPA +=, -=, +, - GRUPA
+// TUTAJ
+
+
+template<class C>
+Group<C>& Group<C>::operator*=( unsigned int n )
+{
+	//tresc: licznosc grupy rosnie n razy
+	companies_no *= n;
+	if ( n != 0 ) {
+		//ale wartosc pojedynczego przedsiebiorstwa maleje n razy
+		acc_val /= n;
+		hsh_val /= n;
+		exo_val /= n;
+	} else {
+		acc_val = hsh_val = exo_val = 0;
+	}
+	return *this;
+}
+
+template<class C>
+Group<C> Group<C>::operator*( unsigned int n ) const
+{
+	Group<C> result( *this );
+	result *= n;
+	return result;
+}
+
+template<class C>
+Group<C>& Group<C>::operator/=( unsigned int n )
+{
+	companies_no = ( n != 0 ) ? ( companies_no / n ) : 0;
+	acc_val *= n;
+	hsh_val *= n;
+	exo_val *= n;
+	return *this;
+}
+
+template<class C>
+Group<C> Group<C>::operator/( unsigned int n ) const
+{
+	Group<C> result( *this );
+	result /= n;
+	return result;
+}
 
 
 /* ========================== FUNKCJE GLOBALNE ============================== */
