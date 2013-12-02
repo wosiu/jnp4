@@ -17,7 +17,6 @@ int main() {
   Group<Exchange_office> s4;
   Group<guns> s5(20);
 
-
   assert((s2 + s3).get_size() == 40);
   assert((s2 += s2).get_size() == 40);
   assert(s2.get_size() == 40);
@@ -26,15 +25,12 @@ int main() {
 
   s3.set_exo_val(25);
 
-/*
   std::cout << s2;
   std::cout << s3;
   std::cout << s2 + s3;
   std::cout << s2 - s3;
   std::cout << s2 * 4;
   std::cout << s2 / 2;
-*/
-
 
   assert((s2 + s3).get_value() == 139200);
   assert((s2 - s3).get_value() == 60000);

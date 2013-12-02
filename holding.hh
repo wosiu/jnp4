@@ -80,7 +80,7 @@ template<class C> struct additive_rollup_comp
 
 
 
-/* ========================== GROUP ======================================= */
+/* ========================== GROUPA ======================================== */
 
 template<class C> class Group
 {
@@ -141,10 +141,9 @@ public:
 	template<class C1, class C2>
 	friend bool operator>=( Group<C1> a, Group<C2> b );
 
-/*
+
 	template<class C1>
 	friend std::ostream& operator<<( std::ostream& os, Group<C1> const& a );
-*/
 
 //Opis ponizszych w tresci zaczyna sie od: "Bardzo liczymy również na to, że..."
 
@@ -170,9 +169,9 @@ unsigned int Group<C>::get_total_exo_val() const
 
 template<class C>
 Group<C>::Group( unsigned int k ) :
-	acc_val( 50 ),
+	acc_val( 15 ),
 	hsh_val( 150 ),
-	exo_val( 15 ),
+	exo_val( 50 ),
 	companies_no( k )
 {}
 
@@ -411,17 +410,17 @@ bool operator>=(Group<C1> a, Group<C2> b)
 		   a.hsh_val * C1::hsh >= b.hsh_val * C2::hsh;
 }
 
-template<typename T>
-std::ostream& operator<<( std::ostream &out, const Group<T> &rhs )
+template<typename C>
+std::ostream& operator<<( std::ostream &out, const Group<C> &rhs )
 {
 	out << "Number of companies: " << rhs.get_size()
 		<< "; Value: " << rhs.get_value() << std::endl
 		<< "Accountancies value: " << rhs.get_acc_val()
 		<< ", Hunting shops value: " << rhs.get_hs_val()
 		<< ", Exchange offices value: " << rhs.get_exo_val() << std::endl
-		<< "Accountancies: " << rhs.get_acc_num()
-		<< ", Hunting shops: " << rhs.get_hs_num()
-		<< ", Exchange offices: " << rhs.get_exo_num() << std::endl;
+		<< "Accountancies: " << C::acc
+		<< ", Hunting shops: " << C::hsh
+		<< ", Exchange offices: " << C::exo << std::endl;
 	return out;
 }
 
@@ -430,6 +429,7 @@ std::ostream& operator<<( std::ostream &out, const Group<T> &rhs )
 
 // PONIZSZE PISANE NA SZYBKO! NAWET NIE SPRAWDZILEM CZY TO SIE KOMPILUJE I MA SENS:
 // TAKI SZKIELECIK..
+/*
 template<class C>
 Group<typename additive_expand_comp<C>::type> const
 additive_expand_group( Group<C> const &s1 )
@@ -473,5 +473,5 @@ bool solve_auction( Group<C1> const &g1, Group<C2> const &g2, Group<C3> const &g
 	}
 	return false;
 }
-
+*/
 #endif

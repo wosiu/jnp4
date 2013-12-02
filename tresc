@@ -231,22 +231,22 @@ int main() {
 Powyższy przykład wypisuje na standardowe wyjście:
 
 Number of companies: 40; Value: 100000
-Accountancies value: 15, Hunting shops value: 150, Exchange offices value: 50
+Accountancies value: 0, Hunting shops value: 150, Exchange offices value: 50
 Accountancies: 0, Hunting shops: 10, Exchange offices: 20
 Number of companies: 20; Value: 40000
 Accountancies value: 15, Hunting shops value: 150, Exchange offices value: 25
 Accountancies: 0, Hunting shops: 10, Exchange offices: 20
 Number of companies: 60; Value: 139200
-Accountancies value: 15, Hunting shops value: 150, Exchange offices value: 41
+Accountancies value: 0, Hunting shops value: 150, Exchange offices value: 41
 Accountancies: 0, Hunting shops: 10, Exchange offices: 20
 Number of companies: 20; Value: 60000
-Accountancies value: 15, Hunting shops value: 150, Exchange offices value: 75
+Accountancies value: 0, Hunting shops value: 150, Exchange offices value: 75
 Accountancies: 0, Hunting shops: 10, Exchange offices: 20
 Number of companies: 160; Value: 97600
-Accountancies value: 3, Hunting shops value: 37, Exchange offices value: 12
+Accountancies value: 0, Hunting shops value: 37, Exchange offices value: 12
 Accountancies: 0, Hunting shops: 10, Exchange offices: 20
 Number of companies: 20; Value: 100000
-Accountancies value: 30, Hunting shops value: 300, Exchange offices value: 100
+Accountancies value: 0, Hunting shops value: 300, Exchange offices value: 100
 Accountancies: 0, Hunting shops: 10, Exchange offices: 20
 
 Rozwiązanie powinno składać się z pliku holding.hh.
