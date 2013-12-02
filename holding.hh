@@ -100,6 +100,9 @@ public:
 	Group( Group<C> const& );
 
 	unsigned int get_size() const;
+	unsigned int get_acc_num() const;
+	unsigned int get_hs_num() const;
+	unsigned int get_exo_num() const;
 	void set_acc_val( unsigned int );
 	void set_hs_val( unsigned int );
 	void set_exo_val( unsigned int );
@@ -228,6 +231,24 @@ template<class C>
 unsigned int Group<C>::get_exo_val() const
 {
 	return exo_val;
+}
+
+template<class C>
+unsigned int Group<C>::get_acc_num() const
+{
+	return companies_no * company.acc;
+}
+
+template<class C>
+unsigned int Group<C>::get_hs_num() const
+{
+	return companies_no * company.hsh;
+}
+
+template<class C>
+unsigned int Group<C>::get_exo_num() const
+{
+	return companies_no * company.exo;
 }
 
 template<class C>
@@ -385,29 +406,41 @@ bool operator!=(Group<C1> a, Group<C2> b)
 template<class C1, class C2>
 bool operator<(Group<C1> a, Group<C2> b)
 {
+	return a.get_hs_num() + a.get_exo_num() < b.get_hs_num() + b.get_exo_num();
+/*
 	return a.acc_val * C1::acc < b.acc_val * C2::acc &&
 		   a.hsh_val * C1::hsh < b.hsh_val * C2::hsh;
+*/
 }
 
 template<class C1, class C2>
 bool operator>(Group<C1> a, Group<C2> b)
 {
+	return a.get_hs_num() + a.get_exo_num() > b.get_hs_num() + b.get_exo_num();
+/*
 	return a.acc_val * C1::acc > b.acc_val * C2::acc &&
 		   a.hsh_val * C1::hsh > b.hsh_val * C2::hsh;
+*/
 }
 
 template<class C1, class C2>
 bool operator<=(Group<C1> a, Group<C2> b)
 {
+	return a.get_hs_num() + a.get_exo_num() <= b.get_hs_num() + b.get_exo_num();
+/*
 	return a.acc_val * C1::acc <= b.acc_val * C2::acc &&
 		   a.hsh_val * C1::hsh <= b.hsh_val * C2::hsh;
+*/
 }
 
 template<class C1, class C2>
 bool operator>=(Group<C1> a, Group<C2> b)
 {
+	return a.get_hs_num() + a.get_exo_num() >= b.get_hs_num() + b.get_exo_num();
+/*
 	return a.acc_val * C1::acc >= b.acc_val * C2::acc &&
 		   a.hsh_val * C1::hsh >= b.hsh_val * C2::hsh;
+*/
 }
 
 template<typename C>
