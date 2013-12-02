@@ -41,17 +41,19 @@ int main() {
   assert(s1 != s4);
   assert(s1 == s1);
 
-/*
+
   assert(typeid(add_comp<Accountancy, Exchange_office>::type) == typeid(small_company));
   assert(typeid(remove_comp<small_company, Accountancy>::type) == typeid(Exchange_office));
   assert(typeid(split_comp<small_company, 2>::type) == typeid(Company<0, 0, 0>));
+
   assert(typeid(additive_rollup_comp<multiply_comp<small_company, 2>::type>::type) ==
          typeid(small_company));
   assert(typeid(additive_expand_comp<small_company>::type) ==
          typeid(add_comp<Hunting_shop, multiply_comp<small_company, 2>::type>::type));
-
   assert(typeid(Group<add_comp<Accountancy, Exchange_office>::type>::company_type) ==
          typeid(small_company));
+
+/*
   assert(typeid(additive_expand_group(s1).company) ==
          typeid(add_comp<multiply_comp<Accountancy, 2>::type,
                 add_comp<Hunting_shop, Exchange_office>::type>::type));
@@ -62,5 +64,5 @@ int main() {
          typeid(add_comp<multiply_comp<Hunting_shop, 3>::type, Exchange_office>::type));
 
   assert(solve_auction(s1, s2, s5) == false);
-  */
+  /**/
 }
