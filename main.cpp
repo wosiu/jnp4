@@ -17,7 +17,7 @@ int main() {
   Group<Exchange_office> s4;
   Group<guns> s5(20);
 
-/*
+
   assert((s2 + s3).get_size() == 40);
   assert((s2 += s2).get_size() == 40);
   assert(s2.get_size() == 40);
@@ -26,12 +26,15 @@ int main() {
 
   s3.set_exo_val(25);
 
+/*
   std::cout << s2;
   std::cout << s3;
   std::cout << s2 + s3;
   std::cout << s2 - s3;
   std::cout << s2 * 4;
   std::cout << s2 / 2;
+*/
+
 
   assert((s2 + s3).get_value() == 139200);
   assert((s2 - s3).get_value() == 60000);
@@ -42,6 +45,7 @@ int main() {
   assert(s1 != s4);
   assert(s1 == s1);
 
+/*
   assert(typeid(add_comp<Accountancy, Exchange_office>::type) == typeid(small_company));
   assert(typeid(remove_comp<small_company, Accountancy>::type) == typeid(Exchange_office));
   assert(typeid(split_comp<small_company, 2>::type) == typeid(Company<0, 0, 0>));

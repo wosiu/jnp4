@@ -4,7 +4,7 @@
 #include <iostream>
 
 // CODE RLZ!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Jak sie nie podoba to wypierdalać
+// Jak sie nie podoba to wypieftalać
 // ..albo mi powiedzieć, zebym wiedzial ze robimy inaczej.
 // 1.: taby nie spacje
 // 2.:
@@ -89,6 +89,11 @@ template<class C> class Group
 	unsigned int exo_val;
 	unsigned int companies_no;
 
+	// pomocnicze:
+	unsigned int get_total_acc_val() const;
+	unsigned int get_total_hs_val() const;
+	unsigned int get_total_exo_val() const;
+
 public:
 	Group();
 	Group( unsigned int k );
@@ -106,28 +111,18 @@ public:
 
 	typedef C company_type;
 	static const company_type company;
-/*
-	// TODO doimplementowac
-	template<class C1, class C2>
-	friend Group<add_comp<C1,C2> > operator+( Group<C1> &a, Group<C2> &b );
 
-	template<class C1, class C2>
-	friend Group<remove_comp<C1,C2> > operator-( Group<C1> &a, Group<C2> &b );
+	Group<C>& operator+=( const Group<C>& );
+	Group<C> operator+( const Group<C>& ) const;
+	Group<C>& operator-=( const Group<C>& );
+	Group<C> operator-( const Group<C>& ) const;
 
-	template<class C1, class C2>
-	friend Group<add_comp<C1,C2> >& operator+=( Group<C1> &a, Group<C2> &b );
-
-	template<class C1, class C2>
-	friend Group<remove_comp<C1,C2> >& operator-=( Group<C1> &a, Group<C2> &b );
-*/
-
-	//TODO a moze by tak void..
 	Group operator*( unsigned int ) const;
 	Group operator/( unsigned int ) const;
 	Group<C>& operator*=( unsigned int );
 	Group& operator/=( unsigned int );
 
-/*
+
 	template<class C1, class C2>
 	friend bool operator==( Group<C1> a, Group<C2> b );
 
@@ -146,10 +141,32 @@ public:
 	template<class C1, class C2>
 	friend bool operator>=( Group<C1> a, Group<C2> b );
 
+/*
 	template<class C1>
 	friend std::ostream& operator<<( std::ostream& os, Group<C1> const& a );
 */
+
+//Opis ponizszych w tresci zaczyna sie od: "Bardzo liczymy również na to, że..."
+
 };
+
+template<class C>
+unsigned int Group<C>::get_total_acc_val() const
+{
+	return companies_no * acc_val * C::acc;
+}
+
+template<class C>
+unsigned int Group<C>::get_total_hs_val() const
+{
+	return companies_no * hsh_val * C::hsh;
+}
+
+template<class C>
+unsigned int Group<C>::get_total_exo_val() const
+{
+	return companies_no * exo_val * C::exo;
+}
 
 template<class C>
 Group<C>::Group( unsigned int k ) :
@@ -165,7 +182,7 @@ Group<C>::Group() :
 {}
 
 template<class C>
-Group<C>::Group(Group<C> const &g) :
+Group<C>::Group( Group<C> const &g ) :
 	acc_val( g.get_acc_val() ),
 	hsh_val( g.get_hs_val() ),
 	exo_val( g.get_exo_val() ),
@@ -221,11 +238,92 @@ unsigned int Group<C>::get_value() const
 			+ exo_val * company.exo ) * companies_no;
 }
 
+// Notka edukacyjna: jest istotne, zeby argument byl Group<C>, a nie np
+// Group< Company<a,b,c> >, aby parsowaly sie tylko grupy z rownowaznymi firmami
+template<class C>
+Group<C>& Group<C>::operator+=( const Group<C>& g2 )
+{
+	// nowa ilosc firm
+	unsigned int n_companies_no = companies_no + g2.companies_no;
+	// nowe sumaryczne ilosci kantorów, sklepów myśliwskich, biur rachunkowych
+	// w calym przedsiebiorstwie
+	unsigned int n_acc_total_no = C::acc * n_companies_no;
+	unsigned int n_hsh_total_no = C::hsh * n_companies_no;
+	unsigned int n_exo_total_no = C::exo * n_companies_no;
 
-// TODO :*
-// operatory:  GRUPA +=, -=, +, - GRUPA
-// TUTAJ
+	acc_val = ( n_acc_total_no == 0 ) ? 0 :
+			( get_total_acc_val() + g2.get_total_acc_val() ) / n_acc_total_no;
 
+	hsh_val = ( n_hsh_total_no == 0 ) ? 0 :
+			( get_total_hs_val() + g2.get_total_hs_val() ) / n_hsh_total_no;
+
+	exo_val = ( n_exo_total_no == 0 ) ? 0 :
+			( get_total_exo_val() + g2.get_total_exo_val() ) / n_exo_total_no;
+
+	companies_no = n_companies_no;
+
+	return *this;
+}
+
+template<class C>
+Group<C> Group<C>::operator+( const Group<C>& g2 ) const
+{
+	Group<C> result( *this );
+	result += g2;
+	return result;
+}
+
+template<class C>
+Group<C>& Group<C>::operator-=( const Group<C>& g2 )
+{
+	unsigned int a, b;
+	unsigned int n_companies_no = ( companies_no < g2.companies_no ) ? 0 :
+											( companies_no - g2.companies_no );
+	unsigned int n_acc_total_no = C::acc * n_companies_no;
+	unsigned int n_hsh_total_no = C::hsh * n_companies_no;
+	unsigned int n_exo_total_no = C::exo * n_companies_no;
+
+	// upewnic sie co z wartoscia odejmowania -> patrz odpowiedz na pytanie
+	// Modrasa na forum
+	// obecnie robie zgodnie z zasadami:
+	// - jeśli dzielnik ma wartość zero, to wynikiem dzielenia ma być zero;
+	// - jeśli odjemna jest mniejsza od odjemnika, to wynikiem odejmowania ma być zero.
+	// co z kolei jest niezgodne z przykladem (?)
+	// ..trzeba poczekac co na to autor
+
+	// TODO [wosiu] Jak bedzie znana odpowiedz dorobic operator ~- oraz ~/
+	// zeby nie sprawdzac za kazdym razem czy dzielnik > 0
+	// oraz odjemna wieksza od odjemnika
+
+	a = get_total_acc_val();
+	b = g2.get_total_acc_val();
+	acc_val = ( n_acc_total_no == 0 || a < b ) ? 0 :
+												( ( a - b ) / n_acc_total_no );
+
+	a = get_total_hs_val();
+	b = g2.get_total_hs_val();
+	hsh_val = ( n_hsh_total_no == 0 || a < b ) ? 0 :
+												( ( a - b ) / n_hsh_total_no );
+
+	a = get_total_exo_val();
+	b = g2.get_total_exo_val();
+	exo_val = ( n_exo_total_no == 0 || a < b ) ? 0 :
+												( ( a - b ) / n_exo_total_no );
+
+	companies_no = n_companies_no;
+
+	return *this;
+}
+
+
+
+template<class C>
+Group<C> Group<C>::operator-( const Group<C>& g2 ) const
+{
+	Group<C> result( *this );
+	result -= g2;
+	return result;
+}
 
 template<class C>
 Group<C>& Group<C>::operator*=( unsigned int n )
@@ -269,6 +367,46 @@ Group<C> Group<C>::operator/( unsigned int n ) const
 	return result;
 }
 
+template<class C1, class C2>
+bool operator==(Group<C1> a, Group<C2> b)
+{
+	return a.acc_val * C1::acc == b.acc_val * C2::acc &&
+		   a.hsh_val * C1::hsh == b.hsh_val * C2::hsh;
+}
+
+template<class C1, class C2>
+bool operator!=(Group<C1> a, Group<C2> b)
+{
+	return !(a==b);
+}
+
+template<class C1, class C2>
+bool operator<(Group<C1> a, Group<C2> b)
+{
+	return a.acc_val * C1::acc < b.acc_val * C2::acc &&
+		   a.hsh_val * C1::hsh < b.hsh_val * C2::hsh;
+}
+
+template<class C1, class C2>
+bool operator>(Group<C1> a, Group<C2> b)
+{
+	return a.acc_val * C1::acc > b.acc_val * C2::acc &&
+		   a.hsh_val * C1::hsh > b.hsh_val * C2::hsh;
+}
+
+template<class C1, class C2>
+bool operator<=(Group<C1> a, Group<C2> b)
+{
+	return a.acc_val * C1::acc <= b.acc_val * C2::acc &&
+		   a.hsh_val * C1::hsh <= b.hsh_val * C2::hsh;
+}
+
+template<class C1, class C2>
+bool operator>=(Group<C1> a, Group<C2> b)
+{
+	return a.acc_val * C1::acc >= b.acc_val * C2::acc &&
+		   a.hsh_val * C1::hsh >= b.hsh_val * C2::hsh;
+}
 
 /* ========================== FUNKCJE GLOBALNE ============================== */
 /*
