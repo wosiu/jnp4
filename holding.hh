@@ -446,33 +446,32 @@ std::ostream& operator<<( std::ostream &out, const Group<C> &rhs )
 
 // PONIZSZE PISANE NA SZYBKO! NAWET NIE SPRAWDZILEM CZY TO SIE KOMPILUJE I MA SENS:
 // TAKI SZKIELECIK..
-/*
 template<class C>
 Group<typename additive_expand_comp<C>::type> const
 additive_expand_group( Group<C> const &s1 )
 {
-	return Group<typename additive_expand_comp<C>::type>( s1 );
+	return Group< typename additive_expand_comp<C>::type >(s1.get_size());
 }
 
 template<class C>
 Group<typename multiply_comp<C, 10>::type> const
 multiplicative_expand_group( Group<C> const &s1 )
 {
-	return Group<typename multiply_comp<C, 10>::type>( s1 );
+	return Group< typename multiply_comp<C, 10>::type >( s1.get_size() );
 }
 
 template<class C>
 Group<typename additive_rollup_comp<C>::type> const
 additive_rollup_group( Group<C> const &s1 )
 {
-	return Group<typename additive_rollup_comp<C>::type>( s1 );
+	return Group< typename additive_rollup_comp<C>::type >( s1.get_size() );
 }
 
 template<class C>
 Group<typename split_comp<C, 10>::type> const
 multiplicative_rollup_group( Group<C> const &s1 )
 {
-	return Group<typename split_comp<C, 10>::type>( s1 );
+	return Group< typename split_comp<C, 10>::type >( s1.get_size() );
 }
 
 template<class C1, class C2, class C3>
@@ -490,5 +489,4 @@ bool solve_auction( Group<C1> const &g1, Group<C2> const &g2, Group<C3> const &g
 	}
 	return false;
 }
-*/
 #endif
