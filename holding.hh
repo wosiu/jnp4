@@ -390,42 +390,45 @@ Group<C> Group<C>::operator/( unsigned int n ) const
 /* ========================== PRZYJACIELE GRUPY ============================= */
 
 template<class C1, class C2>
-bool operator==(Group<C1> a, Group<C2> b)
+bool operator==( Group<C1> a, Group<C2> b )
 {
-	return a.acc_val * C1::acc == b.acc_val * C2::acc &&
-		   a.hsh_val * C1::hsh == b.hsh_val * C2::hsh;
+	return a.get_hs_no() == b.get_hs_no() && a.get_exo_no() == b.get_exo_no();
 }
 
 template<class C1, class C2>
-bool operator!=(Group<C1> a, Group<C2> b)
+bool operator!=( Group<C1> a, Group<C2> b )
 {
-	return !(a==b);
+	return !( a == b );
 }
 
-template<class C1, class C2>
-bool operator<(Group<C1> a, Group<C2> b)
-{
-	return a.get_hs_no() < b.get_hs_no() && a.get_exo_no() < b.get_exo_no();
-}
 
 template<class C1, class C2>
-bool operator>(Group<C1> a, Group<C2> b)
-{
-	return a.get_hs_no() > b.get_hs_no() && a.get_exo_no() > b.get_exo_no();
-}
-
-template<class C1, class C2>
-bool operator<=(Group<C1> a, Group<C2> b)
+bool operator<=( Group<C1> a, Group<C2> b )
 {
 	return a.get_hs_no() <= b.get_hs_no() && a.get_exo_no() <= b.get_exo_no();
 }
 
 template<class C1, class C2>
-bool operator>=(Group<C1> a, Group<C2> b)
+bool operator>=( Group<C1> a, Group<C2> b )
 {
 	return a.get_hs_no() >= b.get_hs_no() && a.get_exo_no() >= b.get_exo_no();
 
 }
+
+template<class C1, class C2>
+bool operator<( Group<C1> a, Group<C2> b )
+{
+	// nowe ustalenie! (patrz komentarze forum)
+	return a <= b && a != b;
+}
+
+template<class C1, class C2>
+bool operator>( Group<C1> a, Group<C2> b )
+{
+	// j.w.
+	return a >= b && a != b;
+}
+
 
 template<typename C>
 std::ostream& operator<<( std::ostream &out, const Group<C> &rhs )
@@ -444,8 +447,6 @@ std::ostream& operator<<( std::ostream &out, const Group<C> &rhs )
 
 /* ========================== FUNKCJE GLOBALNE ============================== */
 
-// PONIZSZE PISANE NA SZYBKO! NAWET NIE SPRAWDZILEM CZY TO SIE KOMPILUJE I MA SENS:
-// TAKI SZKIELECIK..
 template<class C>
 Group<typename additive_expand_comp<C>::type> const
 additive_expand_group( Group<C> const &s1 )
@@ -477,16 +478,7 @@ multiplicative_rollup_group( Group<C> const &s1 )
 template<class C1, class C2, class C3>
 bool solve_auction( Group<C1> const &g1, Group<C2> const &g2, Group<C3> const &g3 )
 {
-	// TODO ? przekminic czy nie powinny byc nieostre nierownosci
-	if( g1 > g2 && g1 > g3 ){
-		return true;
-	}
-	if( g2 > g1 && g2 > g3 ){
-		return true;
-	}
-	if( g3 > g2 && g3 > g1 ){
-		return true;
-	}
-	return false;
+	return ( g1 > g2 && g1 > g3 ) || ( g2 > g1 && g2 > g3 ) 
+							|| ( g3 > g2 && g3 > g1 );  
 }
 #endif
