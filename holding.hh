@@ -3,21 +3,6 @@
 
 #include <iostream>
 
-// CODE RLZ!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Jak sie nie podoba to wypieftalać
-// ..albo mi powiedzieć, zebym wiedzial ze robimy inaczej.
-// 1.: taby nie spacje
-// 2.:
-// if/for/while_(_warunek_){
-//     blabla; (nawet jesli jedna instrukcja)
-// }
-// void funckja(_argumenty_)
-// {
-//     blabla;
-// }
-// TODO :* zniszczyc powyzsze
-// 80 znakow per linia i ni źdźbła wiecej
-
 /* ========================== COMPANY ======================================= */
 
 template <unsigned int _acc, unsigned int _hun, unsigned int _exc>
@@ -135,16 +120,16 @@ public:
 	friend bool operator!=( Group<C1> a, Group<C2> b );
 
 	template<class C1, class C2>
-	friend bool operator<( Group<C1> a, Group<C2> b );
-
-	template<class C1, class C2>
-	friend bool operator>( Group<C1> a, Group<C2> b );
-
-	template<class C1, class C2>
 	friend bool operator<=( Group<C1> a, Group<C2> b );
 
 	template<class C1, class C2>
 	friend bool operator>=( Group<C1> a, Group<C2> b );
+
+	template<class C1, class C2>
+	friend bool operator<( Group<C1> a, Group<C2> b );
+
+	template<class C1, class C2>
+	friend bool operator>( Group<C1> a, Group<C2> b );
 
 
 	template<class C1>
@@ -478,7 +463,7 @@ multiplicative_rollup_group( Group<C> const &s1 )
 template<class C1, class C2, class C3>
 bool solve_auction( Group<C1> const &g1, Group<C2> const &g2, Group<C3> const &g3 )
 {
-	return ( g1 > g2 && g1 > g3 ) || ( g2 > g1 && g2 > g3 ) 
-							|| ( g3 > g2 && g3 > g1 );  
+	return ( g1 > g2 && g1 > g3 ) || ( g2 > g1 && g2 > g3 )
+							|| ( g3 > g2 && g3 > g1 );
 }
 #endif

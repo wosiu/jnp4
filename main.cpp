@@ -53,7 +53,7 @@ int main() {
   assert(typeid(Group<add_comp<Accountancy, Exchange_office>::type>::company_type) ==
          typeid(small_company));
 
-/*
+
   assert(typeid(additive_expand_group(s1).company) ==
          typeid(add_comp<multiply_comp<Accountancy, 2>::type,
                 add_comp<Hunting_shop, Exchange_office>::type>::type));
