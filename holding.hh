@@ -175,6 +175,11 @@ Group<C>::Group( Group<C> const &g ) :
 	companies_no( g.get_size() )
 {}
 
+// TODO ? Przekminic czy settery i gettery nie zrobic inline w klasie
+// ( zeby siedzialy wewnatrz klasy i wtedy nawet w jednej linii je robic
+// sporo linii by odeszlo..
+// tak, to jest dobry pomysl - Accek
+
 template<class C>
 unsigned int Group<C>::get_size() const
 {
@@ -287,15 +292,8 @@ Group<C>& Group<C>::operator-=( const Group<C>& g2 )
 	unsigned int n_hsh_total_no = C::hsh * n_companies_no;
 	unsigned int n_exo_total_no = C::exo * n_companies_no;
 
-	// upewnic sie co z wartoscia odejmowania -> patrz odpowiedz na pytanie
-	// Modrasa na forum
-	// obecnie robie zgodnie z zasadami:
-	// - jeśli dzielnik ma wartość zero, to wynikiem dzielenia ma być zero;
-	// - jeśli odjemna jest mniejsza od odjemnika, to wynikiem odejmowania ma być zero.
-	// co z kolei jest niezgodne z przykladem (?)
-	// ..trzeba poczekac co na to autor
 
-	// TODO [wosiu] Jak bedzie znana odpowiedz dorobic operator ~- oraz ~/
+	// TODO [wosiu] dorobic operator ~- oraz ~/ (bezpiecznych operacji)
 	// zeby nie sprawdzac za kazdym razem czy dzielnik > 0
 	// oraz odjemna wieksza od odjemnika
 
@@ -461,9 +459,10 @@ multiplicative_rollup_group( Group<C> const &s1 )
 }
 
 template<class C1, class C2, class C3>
-bool solve_auction( Group<C1> const &g1, Group<C2> const &g2, Group<C3> const &g3 )
+bool solve_auction( Group<C1> const &g1, Group<C2> const &g2,
+				Group<C3> const &g3 )
 {
 	return ( g1 > g2 && g1 > g3 ) || ( g2 > g1 && g2 > g3 )
-							|| ( g3 > g2 && g3 > g1 );
+			|| ( g3 > g2 && g3 > g1 );
 }
 #endif
