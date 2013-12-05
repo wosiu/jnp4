@@ -2,6 +2,7 @@
 #define HOLDING_HH
 
 #include <iostream>
+#include <typeinfo>
 
 /* ========================== BEZPIECZNA ARYTMETYKA ========================= */
 
@@ -185,11 +186,6 @@ Group<C>::Group( Group<C> const &g ) :
 	exo_val( g.get_exo_val() ),
 	companies_no( g.get_size() )
 {}
-
-// TODO ? Przekminic czy settery i gettery nie zrobic inline w klasie
-// ( zeby siedzialy wewnatrz klasy i wtedy nawet w jednej linii je robic
-// sporo linii by odeszlo..
-// tak, to jest dobry pomysl - Accek
 
 template<class C>
 unsigned int Group<C>::get_size() const
