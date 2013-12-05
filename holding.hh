@@ -3,15 +3,26 @@
 
 #include <iostream>
 
+/* ========================== BEZPIECZNA ARYTMETYKA ========================= */
+
+constexpr unsigned int safe_substract( unsigned int a, unsigned int b )
+{
+    return ( a > b ) ? ( a - b ) : 0;
+}
+
+constexpr unsigned int safe_divide( unsigned int a, unsigned int b )
+{
+    return ( b != 0 ) ? ( a / b ) : 0;
+}
+
 /* ========================== COMPANY ======================================= */
 
 template <unsigned int _acc, unsigned int _hun, unsigned int _exc>
 struct Company
 {
-	//TODO przekminic constexpr zamaist const
-	static const unsigned int acc = _acc;
-	static const unsigned int hsh = _hun;
-	static const unsigned int exo = _exc;
+	static constexpr unsigned int acc = _acc;
+	static constexpr unsigned int hsh = _hun;
+	static constexpr unsigned int exo = _exc;
 };
 
 typedef Company<1, 0, 0> Accountancy;
@@ -27,9 +38,9 @@ template<class C1, class C2> struct add_comp
 
 template<class C1, class C2> struct remove_comp
 {
-	typedef Company<( C1::acc > C2::acc ) ? ( C1::acc - C2::acc ) : 0,
-					( C1::hsh > C2::hsh ) ? ( C1::hsh - C2::hsh ) : 0,
-					( C1::exo > C2::exo ) ? ( C1::exo - C2::exo ) : 0> type;
+	typedef Company<safe_substract( C1::acc, C2::acc ),
+					safe_substract( C1::hsh, C2::hsh ),
+					safe_substract( C1::exo, C2::exo )> type;
 };
 
 template<class C1, int n> struct multiply_comp
@@ -41,12 +52,12 @@ template<class C1, int n> struct multiply_comp
 };
 
 
-template<class C1, int n> struct split_comp
+template<class C1, unsigned int n> struct split_comp
 {
 	static_assert( n >= 0, "Negative split value." );
-	typedef Company<( n == 0 ) ? 0 : ( C1::acc / n ),
-					( n == 0 ) ? 0 : ( C1::hsh / n ),
-					( n == 0 ) ? 0 : ( C1::exo / n )> type;
+	typedef Company<safe_divide( C1::acc, n ),
+					safe_divide( C1::hsh, n ),
+					safe_divide( C1::exo, n )> type;
 };
 
 template<class C> struct additive_expand_comp
@@ -58,9 +69,9 @@ template<class C> struct additive_expand_comp
 
 template<class C> struct additive_rollup_comp
 {
-	typedef Company<( C::acc > 1 ) ? ( C::acc - 1 ) : 0,
-					( C::hsh > 1 ) ? ( C::hsh - 1 ) : 0,
-					( C::exo > 1 ) ? ( C::exo - 1 ) : 0> type;
+	typedef Company<safe_substract( C::acc, 1 ),
+					safe_divide( C::hsh, 1 ),
+					safe_divide( C::exo, 1 )> type;
 };
 
 
@@ -247,8 +258,6 @@ unsigned int Group<C>::get_value() const
 			+ exo_val * company.exo ) * companies_no;
 }
 
-// Notka edukacyjna: jest istotne, zeby argument byl Group<C>, a nie np
-// Group< Company<a,b,c> >, aby parsowaly sie tylko grupy z rownowaznymi firmami
 template<class C>
 Group<C>& Group<C>::operator+=( const Group<C>& g2 )
 {
@@ -260,14 +269,14 @@ Group<C>& Group<C>::operator+=( const Group<C>& g2 )
 	unsigned int n_hsh_total_no = C::hsh * n_companies_no;
 	unsigned int n_exo_total_no = C::exo * n_companies_no;
 
-	acc_val = ( n_acc_total_no == 0 ) ? 0 :
-			( get_total_acc_val() + g2.get_total_acc_val() ) / n_acc_total_no;
+	acc_val = safe_divide( get_total_acc_val() + g2.get_total_acc_val(),
+								n_acc_total_no );
 
-	hsh_val = ( n_hsh_total_no == 0 ) ? 0 :
-			( get_total_hs_val() + g2.get_total_hs_val() ) / n_hsh_total_no;
+	hsh_val = safe_divide( get_total_hs_val() + g2.get_total_hs_val(),
+								n_hsh_total_no );
 
-	exo_val = ( n_exo_total_no == 0 ) ? 0 :
-			( get_total_exo_val() + g2.get_total_exo_val() ) / n_exo_total_no;
+	exo_val = safe_divide( get_total_exo_val() + g2.get_total_exo_val(),
+								n_exo_total_no );
 
 	companies_no = n_companies_no;
 
@@ -286,31 +295,22 @@ template<class C>
 Group<C>& Group<C>::operator-=( const Group<C>& g2 )
 {
 	unsigned int a, b;
-	unsigned int n_companies_no = ( companies_no < g2.companies_no ) ? 0 :
-											( companies_no - g2.companies_no );
+	unsigned int n_companies_no = safe_substract( companies_no, g2.companies_no );
 	unsigned int n_acc_total_no = C::acc * n_companies_no;
 	unsigned int n_hsh_total_no = C::hsh * n_companies_no;
 	unsigned int n_exo_total_no = C::exo * n_companies_no;
 
-
-	// TODO [wosiu] dorobic operator ~- oraz ~/ (bezpiecznych operacji)
-	// zeby nie sprawdzac za kazdym razem czy dzielnik > 0
-	// oraz odjemna wieksza od odjemnika
-
 	a = get_total_acc_val();
 	b = g2.get_total_acc_val();
-	acc_val = ( n_acc_total_no == 0 || a < b ) ? 0 :
-												( ( a - b ) / n_acc_total_no );
+	acc_val = safe_divide( safe_substract( a, b ), n_acc_total_no );
 
 	a = get_total_hs_val();
 	b = g2.get_total_hs_val();
-	hsh_val = ( n_hsh_total_no == 0 || a < b ) ? 0 :
-												( ( a - b ) / n_hsh_total_no );
+	hsh_val = safe_divide( safe_substract( a, b ), n_hsh_total_no );
 
 	a = get_total_exo_val();
 	b = g2.get_total_exo_val();
-	exo_val = ( n_exo_total_no == 0 || a < b ) ? 0 :
-												( ( a - b ) / n_exo_total_no );
+	exo_val = safe_divide( safe_substract( a, b ), n_exo_total_no );
 
 	companies_no = n_companies_no;
 
@@ -354,7 +354,7 @@ Group<C> Group<C>::operator*( unsigned int n ) const
 template<class C>
 Group<C>& Group<C>::operator/=( unsigned int n )
 {
-	companies_no = ( n != 0 ) ? ( companies_no / n ) : 0;
+	companies_no = safe_divide( companies_no, n );
 	acc_val *= n;
 	hsh_val *= n;
 	exo_val *= n;
@@ -375,6 +375,9 @@ Group<C> Group<C>::operator/( unsigned int n ) const
 template<class C1, class C2>
 bool operator==( Group<C1> a, Group<C2> b )
 {
+	if ( typeid(C1) == typeid(C2) ) {
+		return a.get_size() == b.get_size();
+	}
 	return a.get_hs_no() == b.get_hs_no() && a.get_exo_no() == b.get_exo_no();
 }
 
@@ -388,14 +391,19 @@ bool operator!=( Group<C1> a, Group<C2> b )
 template<class C1, class C2>
 bool operator<=( Group<C1> a, Group<C2> b )
 {
+	if ( typeid(C1) == typeid(C2) ) {
+		return a.get_size() <= b.get_size();
+	}
 	return a.get_hs_no() <= b.get_hs_no() && a.get_exo_no() <= b.get_exo_no();
 }
 
 template<class C1, class C2>
 bool operator>=( Group<C1> a, Group<C2> b )
 {
+	if ( typeid(C1) == typeid(C2) ) {
+		return a.get_size() >= b.get_size();
+	}
 	return a.get_hs_no() >= b.get_hs_no() && a.get_exo_no() >= b.get_exo_no();
-
 }
 
 template<class C1, class C2>
