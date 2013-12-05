@@ -70,8 +70,8 @@ template<class C> struct additive_expand_comp
 template<class C> struct additive_rollup_comp
 {
 	typedef Company<safe_substract( C::acc, 1 ),
-					safe_divide( C::hsh, 1 ),
-					safe_divide( C::exo, 1 )> type;
+					safe_substract( C::hsh, 1 ),
+					safe_substract( C::exo, 1 )> type;
 };
 
 
