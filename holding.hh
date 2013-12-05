@@ -7,12 +7,12 @@
 
 constexpr unsigned int safe_substract( unsigned int a, unsigned int b )
 {
-    return ( a > b ) ? ( a - b ) : 0;
+	return ( a > b ) ? ( a - b ) : 0;
 }
 
 constexpr unsigned int safe_divide( unsigned int a, unsigned int b )
 {
-    return ( b != 0 ) ? ( a / b ) : 0;
+	return ( b != 0 ) ? ( a / b ) : 0;
 }
 
 /* ========================== COMPANY ======================================= */
