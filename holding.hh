@@ -371,7 +371,7 @@ Group<C> Group<C>::operator/( unsigned int n ) const
 template<class C1, class C2>
 bool operator==( Group<C1> a, Group<C2> b )
 {
-	if ( typeid(C1) == typeid(C2) ) {
+	if ( typeid( C1 ) == typeid( C2 ) ) {
 		return a.get_size() == b.get_size();
 	}
 	return a.get_hs_no() == b.get_hs_no() && a.get_exo_no() == b.get_exo_no();
@@ -387,7 +387,7 @@ bool operator!=( Group<C1> a, Group<C2> b )
 template<class C1, class C2>
 bool operator<=( Group<C1> a, Group<C2> b )
 {
-	if ( typeid(C1) == typeid(C2) ) {
+	if ( typeid( C1 ) == typeid( C2 ) ) {
 		return a.get_size() <= b.get_size();
 	}
 	return a.get_hs_no() <= b.get_hs_no() && a.get_exo_no() <= b.get_exo_no();
@@ -396,7 +396,7 @@ bool operator<=( Group<C1> a, Group<C2> b )
 template<class C1, class C2>
 bool operator>=( Group<C1> a, Group<C2> b )
 {
-	if ( typeid(C1) == typeid(C2) ) {
+	if ( typeid( C1 ) == typeid( C2 ) ) {
 		return a.get_size() >= b.get_size();
 	}
 	return a.get_hs_no() >= b.get_hs_no() && a.get_exo_no() >= b.get_exo_no();
