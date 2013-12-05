@@ -1,9 +1,9 @@
-
+#include "holding.hh"
 #include <cassert>
 #include <iostream>
 #include <vector>
 
-#include "holding.hh"
+
 #include <typeinfo>
 typedef add_comp<Accountancy, Exchange_office>::type small_company;
 typedef add_comp<multiply_comp<Hunting_shop, 10>::type, multiply_comp<Exchange_office, 20>::type>::type money;
@@ -40,7 +40,7 @@ int main() {
   assert(s2 > s3);
   assert(s1 != s4);
   assert(s1 == s1);
-/*
+
 
   assert(typeid(add_comp<Accountancy, Exchange_office>::type) == typeid(small_company));
   assert(typeid(remove_comp<small_company, Accountancy>::type) == typeid(Exchange_office));
@@ -62,7 +62,7 @@ int main() {
          typeid(multiply_comp<Accountancy, 10>::type));
   assert(typeid(multiplicative_rollup_group(s5).company) ==
          typeid(add_comp<multiply_comp<Hunting_shop, 3>::type, Exchange_office>::type));
-*/
+
   assert(solve_auction(s1, s2, s5) == false);
   /**/
 }
